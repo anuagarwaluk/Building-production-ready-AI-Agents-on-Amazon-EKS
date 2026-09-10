@@ -4,7 +4,8 @@ I built a customer service agent for a fictional online store, deployed it on Am
 
 This is my hands-on build from the AWS **AI Agents on Amazon EKS** workshop, restructured as a deployable reference with my own code, deployment scripts, documentation, and troubleshooting notes.
 
-![Self-managed architecture](docs/images/architecture-self-managed.png)
+<img width="500" height="275" alt="self-managed-arch-dark" src="https://github.com/user-attachments/assets/be6e4aa8-440b-487c-95ba-38fc75314f88" />
+
 
 ## The two tracks
 
@@ -22,9 +23,13 @@ This is my hands-on build from the AWS **AI Agents on Amazon EKS** workshop, res
 | Evaluation | LLM-as-a-Judge via LiteLLM | AgentCore Evaluations (built-in + custom evaluator) |
 | Knowledge graph | Neo4j | optional |
 
+<img width="500" height="316" alt="fully-managed-arch-dark" src="https://github.com/user-attachments/assets/08aed938-51c3-4ede-bba5-6302f27447ce" />
+
 The point, proven twice: each capability is an independent decision. You do not pick "EKS plus open source" or "all managed" as a package. Pick per capability, keep orchestration where your operational strength is, and let the model plane absorb the backend choice so the agent never has to. The full argument: [docs/decision-framework.md](docs/decision-framework.md).
 
 ## The application
+<img width="3200" height="2364" alt="architecture-integrated" src="https://github.com/user-attachments/assets/471b512f-4b00-471e-a4fb-a856303fa364" />
+
 
 **AnyCompany Shop**, a fictional electronics retailer. The agent handles order status and tracking, product questions, inventory checks, returns, and light computation, through a Chainlit chat UI with four profiles (each track, single-agent and multi-agent). Test data: three orders, a 13-product catalogue with store FAQs, and stock levels for 10 products, all in [data/](data).
 
