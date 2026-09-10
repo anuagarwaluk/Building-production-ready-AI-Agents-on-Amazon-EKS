@@ -4,8 +4,7 @@ I built a customer service agent for a fictional online store, deployed it on Am
 
 This is my hands-on build from the AWS **AI Agents on Amazon EKS** workshop, restructured as a deployable reference with my own code, deployment scripts, documentation, and troubleshooting notes.
 
-<img width="500" height="275" alt="self-managed-arch-dark" src="https://github.com/user-attachments/assets/edc7fb28-5031-4e1c-be8e-62978d04501b" />
-
+![Self-managed architecture](docs/images/architecture-self-managed.png)
 
 ## The two tracks
 
@@ -23,13 +22,9 @@ This is my hands-on build from the AWS **AI Agents on Amazon EKS** workshop, res
 | Evaluation | LLM-as-a-Judge via LiteLLM | AgentCore Evaluations (built-in + custom evaluator) |
 | Knowledge graph | Neo4j | optional |
 
-<img width="500" height="316" alt="fully-managed-arch-dark" src="https://github.com/user-attachments/assets/df25a12f-b13d-4f8c-8973-d8b7a57e04b2" />
-
 The point, proven twice: each capability is an independent decision. You do not pick "EKS plus open source" or "all managed" as a package. Pick per capability, keep orchestration where your operational strength is, and let the model plane absorb the backend choice so the agent never has to. The full argument: [docs/decision-framework.md](docs/decision-framework.md).
 
 ## The application
-<img width="3200" height="2364" alt="architecture-integrated" src="https://github.com/user-attachments/assets/464962a6-0d7c-4962-a868-92d99cfb132c" />
-
 
 **AnyCompany Shop**, a fictional electronics retailer. The agent handles order status and tracking, product questions, inventory checks, returns, and light computation, through a Chainlit chat UI with four profiles (each track, single-agent and multi-agent). Test data: three orders, a 13-product catalogue with store FAQs, and stock levels for 10 products, all in [data/](data).
 
@@ -114,7 +109,6 @@ The self-managed track's cost is capacity-shaped (the Inferentia node bills whil
 - Built from the AWS [AI Agents on Amazon EKS](https://catalog.workshops.aws/ai-agents-on-eks/en-US) workshop; the lab structure, the AnyCompany Shop scenario, and the evaluation module's telemetry pattern follow it, reimplemented and documented here as my own build.
 - Frameworks and services: [Strands Agents SDK](https://strandsagents.com/), [LiteLLM](https://litellm.ai/), [vLLM](https://vllm.ai/), [Langfuse](https://langfuse.com/), [Milvus](https://milvus.io/), [Neo4j](https://neo4j.com/), [Chainlit](https://chainlit.io/), [Model Context Protocol](https://modelcontextprotocol.io/), [A2A](https://a2a-protocol.org/), Amazon Bedrock and [AgentCore](https://aws.amazon.com/bedrock/agentcore/).
 
+## License
 
-*Built and measured by Anu Agarwal — [linkedin.com/in/agarwalanu](https://www.linkedin.com/in/agarwalanu)*
-
-<img width="732" height="56" alt="image" src="https://github.com/user-attachments/assets/6d6d2775-4fcf-45af-a872-aa3b19b7db72" />
+MIT-0. See [LICENSE](LICENSE).

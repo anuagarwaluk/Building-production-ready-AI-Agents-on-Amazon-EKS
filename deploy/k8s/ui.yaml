@@ -1,0 +1,60 @@
+# Chainlit chat UI with the four track/mode profiles.
+#   envsubst < ui.yaml | kubectl apply -f -
+# Expose it with a port-forward for a lab, or add an Ingress/LoadBalancer
+# (with authentication in front) for anything shared.
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-ui
+  namespace: ui
+spec:
+  selector:
+    app.kubernetes.io/name: chat-ui
+  ports:
+    - port: 8080
+      targetPort: http
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-ui
+  namespace: ui
+  labels:
+    app.kubernetes.io/name: chat-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: chat-ui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: chat-ui
+    spec:
+      containers:
+        - name: chat-ui
+          image: ${ECR_REPO_CHAT_UI_URI}:latest
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SELF_MANAGED_AGENT_URL
+              value: "http://customer-agent.agents:8000"
+            - name: INTEGRATED_AGENT_URL
+              value: "http://customer-agent-integrated.agents:8000"
+            - name: SELF_MANAGED_ORCHESTRATOR_URL
+              value: "http://orchestrator.agents:8000"
+            - name: INTEGRATED_ORCHESTRATOR_URL
+              value: "http://orchestrator-integrated.agents:8000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi

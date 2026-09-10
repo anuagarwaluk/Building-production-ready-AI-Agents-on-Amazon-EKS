@@ -1,0 +1,12 @@
+{
+  "Laptop Pro 15": {"in_stock": 14, "warehouse": "UK-LON-1", "restock_eta": null},
+  "Laptop Air 13": {"in_stock": 22, "warehouse": "UK-LON-1", "restock_eta": null},
+  "Wireless Mouse": {"in_stock": 180, "warehouse": "UK-MAN-2", "restock_eta": null},
+  "USB-C Hub": {"in_stock": 64, "warehouse": "UK-MAN-2", "restock_eta": null},
+  "Noise Cancelling Headphones": {"in_stock": 0, "warehouse": "UK-LON-1", "restock_eta": "2026-09-15"},
+  "Mechanical Keyboard": {"in_stock": 41, "warehouse": "UK-MAN-2", "restock_eta": null},
+  "4K Monitor 27": {"in_stock": 9, "warehouse": "UK-LON-1", "restock_eta": null},
+  "1080p Webcam": {"in_stock": 75, "warehouse": "UK-MAN-2", "restock_eta": null},
+  "Portable SSD 1TB": {"in_stock": 33, "warehouse": "UK-MAN-2", "restock_eta": null},
+  "Bluetooth Speaker": {"in_stock": 3, "warehouse": "UK-LON-1", "restock_eta": "2026-09-20"}
+}

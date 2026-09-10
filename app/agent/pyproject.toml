@@ -1,0 +1,43 @@
+[project]
+name = "customer-agent"
+version = "1.0.0"
+description = "AnyCompany Shop customer service agent: Strands on EKS, backends chosen by config"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "strands-agents[a2a,openai,otel]>=1.3.0",
+    "strands-agents-tools>=0.2.1",
+    "a2a-sdk>=0.2.16",
+    "mcp[cli]>=1.12.1",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+    "httpx>=0.28.0",
+    "pymilvus>=2.4.0",
+    "sentence-transformers>=3.0.0",
+    "neo4j>=5.24.0",
+    "langfuse>=3.0.0",
+    "opentelemetry-sdk>=1.27.0",
+    "boto3>=1.35.0",
+]
+
+[project.optional-dependencies]
+# Integrated track: AgentCore Memory, sandboxes, and dual-export tracing
+agentcore = [
+    "bedrock-agentcore>=0.1.0",
+    "aws-opentelemetry-distro>=0.6.0",
+    "playwright>=1.47.0",
+]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+"customer-agent" = "src.server:main"
+"orchestrator-agent" = "src.a2a.orchestrator:main"
+"order-agent" = "src.a2a.order_agent:main"
+"product-agent" = "src.a2a.product_agent:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

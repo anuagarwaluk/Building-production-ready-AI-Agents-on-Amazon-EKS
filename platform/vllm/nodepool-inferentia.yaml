@@ -1,0 +1,31 @@
+# EKS Auto Mode custom NodePool for AWS Inferentia (inf2) capacity.
+# Auto Mode's built-in pools are general purpose; accelerated capacity
+# needs its own pool. Nodes provision on demand when the vLLM pod is
+# scheduled and scale back to zero when it is removed.
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: inferentia
+spec:
+  template:
+    metadata:
+      labels:
+        workload: inference
+    spec:
+      nodeClassRef:
+        group: eks.amazonaws.com
+        kind: NodeClass
+        name: default
+      requirements:
+        - key: eks.amazonaws.com/instance-family
+          operator: In
+          values: ["inf2"]
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["on-demand"]
+      taints:
+        - key: aws.amazon.com/neuron
+          value: "true"
+          effect: NoSchedule
+  limits:
+    cpu: "64"

@@ -1,0 +1,179 @@
+# Multi-agent lab: the generalist split into specialists over A2A.
+# Order Agent and Product Agent publish Agent Cards on :9000; the
+# Orchestrator discovers them and serves /chat on :8000 for the UI.
+# All three run from the same customer-agent image, different entrypoints.
+#   envsubst < a2a-specialists.yaml | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-agent
+  namespace: agents
+spec:
+  selector:
+    app.kubernetes.io/name: order-agent
+  ports:
+    - port: 9000
+      targetPort: a2a
+      name: a2a
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-agent
+  namespace: agents
+  labels:
+    app.kubernetes.io/name: order-agent
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: order-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: order-agent
+    spec:
+      serviceAccountName: agent
+      containers:
+        - name: order-agent
+          image: ${ECR_REPO_CUSTOMER_AGENT_URI}:latest
+          command: ["order-agent"]
+          ports:
+            - containerPort: 9000
+              name: a2a
+          env:
+            - name: LITELLM_BASE_URL
+              value: "http://litellm.litellm:4000"
+            - name: MODEL_ID
+              value: "${MODEL_ID}"
+            - name: ORDERS_TOOL_MODE
+              value: "mcp"
+            - name: MCP_SERVER_URL
+              value: "http://shop-mcp.mcp-servers:8080/mcp"
+            - name: A2A_URL
+              value: "http://order-agent.agents:9000"
+          livenessProbe:
+            tcpSocket:
+              port: a2a
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: a2a
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-agent
+  namespace: agents
+spec:
+  selector:
+    app.kubernetes.io/name: product-agent
+  ports:
+    - port: 9000
+      targetPort: a2a
+      name: a2a
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-agent
+  namespace: agents
+  labels:
+    app.kubernetes.io/name: product-agent
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: product-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: product-agent
+    spec:
+      serviceAccountName: agent
+      containers:
+        - name: product-agent
+          image: ${ECR_REPO_CUSTOMER_AGENT_URI}:latest
+          command: ["product-agent"]
+          ports:
+            - containerPort: 9000
+              name: a2a
+          env:
+            - name: AWS_REGION
+              value: "${AWS_REGION}"
+            - name: LITELLM_BASE_URL
+              value: "http://litellm.litellm:4000"
+            - name: MODEL_ID
+              value: "${MODEL_ID}"
+            - name: MILVUS_URI
+              value: "http://milvus.milvus:19530"
+            - name: AGENTCORE_TOOLS
+              value: "${AGENTCORE_TOOLS}"
+            - name: A2A_URL
+              value: "http://product-agent.agents:9000"
+          livenessProbe:
+            tcpSocket:
+              port: a2a
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: a2a
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator
+  namespace: agents
+spec:
+  selector:
+    app.kubernetes.io/name: orchestrator
+  ports:
+    - port: 8000
+      targetPort: http
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator
+  namespace: agents
+  labels:
+    app.kubernetes.io/name: orchestrator
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: orchestrator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: orchestrator
+    spec:
+      serviceAccountName: agent
+      containers:
+        - name: orchestrator
+          image: ${ECR_REPO_CUSTOMER_AGENT_URI}:latest
+          command: ["orchestrator-agent"]
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: LITELLM_BASE_URL
+              value: "http://litellm.litellm:4000"
+            - name: MODEL_ID
+              value: "${MODEL_ID}"
+            - name: ORDER_AGENT_URL
+              value: "http://order-agent.agents:9000"
+            - name: PRODUCT_AGENT_URL
+              value: "http://product-agent.agents:9000"
+            - name: LANGFUSE_BASE_URL
+              value: "http://langfuse-web.langfuse:3000"
+            - name: LANGFUSE_PUBLIC_KEY
+              value: "${LANGFUSE_PUBLIC_KEY}"
+            - name: LANGFUSE_SECRET_KEY
+              value: "${LANGFUSE_SECRET_KEY}"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http

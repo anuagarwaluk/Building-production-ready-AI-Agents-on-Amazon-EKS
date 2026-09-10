@@ -1,0 +1,92 @@
+# Customer agent, integrated track. Same image as self-managed; the diff
+# against customer-agent-selfmanaged.yaml IS the migration:
+#   MODEL_ID            qwen2-5-3b-neuron  ->  nova-lite   (Bedrock via LiteLLM)
+#   MEMORY_BACKEND      milvus             ->  agentcore   (AgentCore Memory)
+#   AGENTCORE_TOOLS                        ->  1           (Code Interpreter + Browser)
+#   AGENTCORE_OBSERVABILITY                ->  1           (dual-export for Evaluations)
+# Langfuse, MCP, and the /chat contract are untouched.
+#   envsubst < customer-agent-integrated.yaml | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-agent-integrated
+  namespace: agents
+spec:
+  selector:
+    app.kubernetes.io/name: customer-agent-integrated
+  ports:
+    - port: 8000
+      targetPort: http
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-agent-integrated
+  namespace: agents
+  labels:
+    app.kubernetes.io/name: customer-agent-integrated
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: customer-agent-integrated
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: customer-agent-integrated
+    spec:
+      serviceAccountName: agent
+      containers:
+        - name: customer-agent
+          image: ${ECR_REPO_CUSTOMER_AGENT_URI}:latest
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: AWS_REGION
+              value: "${AWS_REGION}"
+            - name: LITELLM_BASE_URL
+              value: "http://litellm.litellm:4000"
+            - name: MODEL_ID
+              value: "nova-lite"
+            - name: ORDERS_TOOL_MODE
+              value: "mcp"
+            - name: MCP_SERVER_URL
+              value: "http://shop-mcp.mcp-servers:8080/mcp"
+            - name: MILVUS_URI
+              value: "http://milvus.milvus:19530"
+            - name: MEMORY_BACKEND
+              value: "agentcore"
+            - name: AGENTCORE_MEMORY_ID
+              value: "${AGENTCORE_MEMORY_ID}"
+            - name: AGENTCORE_TOOLS
+              value: "1"
+            - name: AGENTCORE_OBSERVABILITY
+              value: "1"
+            - name: OTEL_SERVICE_NAME
+              value: "customer-agent-eval"
+            - name: AGENT_ID
+              value: "customer-agent"
+            - name: LANGFUSE_BASE_URL
+              value: "http://langfuse-web.langfuse:3000"
+            - name: LANGFUSE_PUBLIC_KEY
+              value: "${LANGFUSE_PUBLIC_KEY}"
+            - name: LANGFUSE_SECRET_KEY
+              value: "${LANGFUSE_SECRET_KEY}"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 2Gi

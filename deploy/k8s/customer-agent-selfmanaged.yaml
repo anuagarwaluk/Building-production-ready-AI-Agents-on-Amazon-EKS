@@ -1,0 +1,85 @@
+# Customer agent, self-managed track: Qwen on Inferentia via LiteLLM,
+# Milvus for RAG and memory, MCP tools, Neo4j knowledge graph, Langfuse.
+#   envsubst < customer-agent-selfmanaged.yaml | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: agent
+  namespace: agents
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-agent
+  namespace: agents
+spec:
+  selector:
+    app.kubernetes.io/name: customer-agent
+  ports:
+    - port: 8000
+      targetPort: http
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-agent
+  namespace: agents
+  labels:
+    app.kubernetes.io/name: customer-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: customer-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: customer-agent
+    spec:
+      serviceAccountName: agent
+      containers:
+        - name: customer-agent
+          image: ${ECR_REPO_CUSTOMER_AGENT_URI}:latest
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: LITELLM_BASE_URL
+              value: "http://litellm.litellm:4000"
+            - name: MODEL_ID
+              value: "qwen2-5-3b-neuron"
+            - name: ORDERS_TOOL_MODE
+              value: "mcp"
+            - name: MCP_SERVER_URL
+              value: "http://shop-mcp.mcp-servers:8080/mcp"
+            - name: MILVUS_URI
+              value: "http://milvus.milvus:19530"
+            - name: MEMORY_BACKEND
+              value: "milvus"
+            - name: NEO4J_URI
+              value: "bolt://neo4j.neo4j:7687"
+            - name: NEO4J_PASSWORD
+              value: "${NEO4J_PASSWORD}"
+            - name: LANGFUSE_BASE_URL
+              value: "http://langfuse-web.langfuse:3000"
+            - name: LANGFUSE_PUBLIC_KEY
+              value: "${LANGFUSE_PUBLIC_KEY}"
+            - name: LANGFUSE_SECRET_KEY
+              value: "${LANGFUSE_SECRET_KEY}"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 2Gi

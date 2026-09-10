@@ -1,0 +1,31 @@
+# The model plane's routing table. This file is the pivot of the whole
+# repo: agents call one OpenAI-compatible endpoint and pick a model_name;
+# where inference actually happens is decided here and only here.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: litellm-config
+  namespace: litellm
+data:
+  config.yaml: |
+    model_list:
+      # Self-managed backend: Qwen2.5-3B on vLLM (Inferentia)
+      - model_name: qwen2-5-3b-neuron
+        litellm_params:
+          model: hosted_vllm/Qwen/Qwen2.5-3B-Instruct
+          api_base: http://qwen2-5-3b-neuron.vllm:8000/v1
+          api_key: "none"
+
+      # Managed backend: Amazon Nova Lite on Bedrock.
+      # Credentials come from EKS Pod Identity on the litellm ServiceAccount.
+      - model_name: nova-lite
+        litellm_params:
+          model: bedrock/us.amazon.nova-lite-v1:0
+
+      # Judge model for LLM-as-a-Judge evaluation (self-managed track)
+      - model_name: claude-sonnet-4-5
+        litellm_params:
+          model: bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0
+
+    litellm_settings:
+      drop_params: true

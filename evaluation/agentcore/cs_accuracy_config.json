@@ -1,0 +1,17 @@
+{
+  "llmAsAJudge": {
+    "instructions": "You are a senior customer-service QA auditor for an online retailer. Evaluate the ACCURACY of this agent interaction.\n\nContext (conversation + tool calls): {context}\n\nAgent response: {assistant_turn}\n\nDid the agent call lookup_order instead of guessing? Are order details, statuses, prices, and tracking consistent with the tool result? Did it avoid inventing any order or detail not returned by a tool?",
+    "ratingScale": {
+      "numerical": [
+        {"label": "Grounded", "definition": "Fully grounded in tool results, no invented details", "value": 1.0},
+        {"label": "Partial",  "definition": "Mostly grounded, minor unsupported detail", "value": 0.5},
+        {"label": "Invented", "definition": "Invented order details or ignored tool results", "value": 0.0}
+      ]
+    },
+    "modelConfig": {
+      "bedrockEvaluatorModelConfig": {
+        "modelId": "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "products": [
+    {"name": "Laptop Pro 15", "category": "Computers", "price": 1299.99, "description": "15 inch laptop with 16GB RAM, 512GB SSD, and all-day battery. Suited to development, design, and business workloads."},
+    {"name": "Laptop Air 13", "category": "Computers", "price": 899.99, "description": "Lightweight 13 inch laptop with 8GB RAM and 256GB SSD. Built for travel and everyday productivity."},
+    {"name": "Wireless Mouse", "category": "Accessories", "price": 29.99, "description": "Ergonomic 2.4GHz wireless mouse with adjustable DPI and six month battery life. Works with the USB-C Hub receiver port."},
+    {"name": "USB-C Hub", "category": "Accessories", "price": 49.99, "description": "7 in 1 USB-C hub: HDMI 4K, two USB-A, SD card reader, 100W passthrough charging. Compatible with Laptop Pro 15 and Laptop Air 13."},
+    {"name": "Noise Cancelling Headphones", "category": "Audio", "price": 249.99, "description": "Over-ear headphones with active noise cancellation, 30 hour battery, and multipoint Bluetooth pairing."},
+    {"name": "Mechanical Keyboard", "category": "Accessories", "price": 119.99, "description": "Tenkeyless mechanical keyboard with hot-swappable switches and white backlight. Pairs well with the Wireless Mouse."},
+    {"name": "4K Monitor 27", "category": "Displays", "price": 379.99, "description": "27 inch 4K IPS monitor with USB-C input and 65W laptop charging over a single cable."},
+    {"name": "1080p Webcam", "category": "Accessories", "price": 59.99, "description": "Full HD webcam with autofocus, dual microphones, and a privacy shutter."},
+    {"name": "Portable SSD 1TB", "category": "Storage", "price": 109.99, "description": "Pocket-size 1TB SSD with USB-C, 1050MB/s reads, and hardware encryption."},
+    {"name": "Bluetooth Speaker", "category": "Audio", "price": 79.99, "description": "Compact waterproof speaker with 12 hour battery and stereo pairing."},
+    {"name": "Smartwatch S2", "category": "Wearables", "price": 199.99, "description": "Fitness smartwatch with GPS, heart rate tracking, and 7 day battery."},
+    {"name": "Laptop Stand", "category": "Accessories", "price": 39.99, "description": "Aluminium laptop stand with adjustable height and cable routing. Fits both laptop models."},
+    {"name": "65W GaN Charger", "category": "Accessories", "price": 44.99, "description": "Compact 65W USB-C charger that powers both laptop models and fast-charges phones."}
+  ],
+  "faqs": [
+    {"name": "Returns policy", "category": "FAQ", "description": "Items can be returned within 30 days of delivery in original condition. Refunds are issued to the original payment method within 5 business days of the return arriving."},
+    {"name": "Shipping times", "category": "FAQ", "description": "Standard shipping takes 3 to 5 business days. Orders over 50.00 ship free. Express delivery in 2 business days is available at checkout."},
+    {"name": "Warranty", "category": "FAQ", "description": "All electronics carry a 12 month manufacturer warranty. Laptops can be extended to 36 months with a protection plan."},
+    {"name": "Payment methods", "category": "FAQ", "description": "We accept major credit and debit cards, PayPal, and store gift cards. Payment is charged when the order ships."}
+  ]
+}

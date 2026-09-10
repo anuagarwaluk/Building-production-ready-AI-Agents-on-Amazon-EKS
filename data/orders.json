@@ -1,0 +1,42 @@
+{
+  "ORD-12345": {
+    "order_id": "ORD-12345",
+    "customer": "Jane Doe",
+    "items": [
+      {"product": "Laptop Pro 15", "quantity": 1, "unit_price": 1299.99}
+    ],
+    "total": 1299.99,
+    "status": "Shipped",
+    "tracking_number": "TRK-4402118876",
+    "carrier": "AnyCompany Express",
+    "estimated_delivery": "2 business days",
+    "placed_at": "2026-09-05"
+  },
+  "ORD-67890": {
+    "order_id": "ORD-67890",
+    "customer": "John Smith",
+    "items": [
+      {"product": "Wireless Mouse", "quantity": 1, "unit_price": 29.99},
+      {"product": "USB-C Hub", "quantity": 2, "unit_price": 49.99}
+    ],
+    "total": 129.97,
+    "status": "Delivered",
+    "tracking_number": "TRK-4401995521",
+    "carrier": "AnyCompany Express",
+    "delivered_at": "2026-09-03",
+    "placed_at": "2026-08-29"
+  },
+  "ORD-11111": {
+    "order_id": "ORD-11111",
+    "customer": "Alice Johnson",
+    "items": [
+      {"product": "Noise Cancelling Headphones", "quantity": 1, "unit_price": 249.99}
+    ],
+    "total": 249.99,
+    "status": "Processing",
+    "tracking_number": null,
+    "carrier": null,
+    "estimated_delivery": "Ships within 3 business days",
+    "placed_at": "2026-09-08"
+  }
+}
