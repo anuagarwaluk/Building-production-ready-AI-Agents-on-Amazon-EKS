@@ -116,4 +116,6 @@ The self-managed track's cost is capacity-shaped (the Inferentia node bills whil
 
 ## License
 
-MIT-0. See [LICENSE](LICENSE).
+*Built and measured by Anu Agarwal — [linkedin.com/in/agarwalanu](https://www.linkedin.com/in/agarwalanu)*
+
+<img width="732" height="56" alt="image" src="https://github.com/user-attachments/assets/6d6d2775-4fcf-45af-a872-aa3b19b7db72" />
